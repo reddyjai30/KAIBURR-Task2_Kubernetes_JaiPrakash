@@ -229,3 +229,36 @@ spec:
 
 <img width="1000" alt="Screenshot 2024-01-14 at 2 28 35 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/9e1387fa-0a21-4e73-b287-fa85a4a47af1">
 
+
+#### Step 2: Deploy to Kubernetes
+-**Start your Kubernetes cluster using Minikube**
+ - Install minikube using
+   ```bash
+   brew install minikube
+   ```
+Starting
+```bash
+minikube start
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 35 49 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/884d05e3-9de4-44e1-a67e-666e308543e6">
+
+-**Apply the manifests**
+```bash
+kubectl apply -f mongodb-deployment.yaml
+kubectl apply -f mongodb-service.yaml
+kubectl apply -f mongodb-pvc.yaml
+kubectl apply -f app-deployment.yaml
+kubectl apply -f app-service.yaml
+```
+
+
+-**Verify Pods**
+```bash
+kubectl get pods
+```
+
+-**Start Minikube**
+```bash
+minikube service task-api-service
+```
+
