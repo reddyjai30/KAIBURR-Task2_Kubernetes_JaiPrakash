@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t my-spring-app .
+      - docker tag my-spring-app:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/my-spring-app:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/my-spring-app:latest
