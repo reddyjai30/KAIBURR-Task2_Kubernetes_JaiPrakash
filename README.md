@@ -26,7 +26,7 @@
 ## Setting Up the Project 
 
 ### Step 1: Create Dockerfiles
-   Create a Dockerfile in the root of your Java project
+   Create a Dockerfile in the root of your Java project in [Task 1](https://github.com/reddyjai30/KAIBURR-Task1_JavaRESTAPI_JaiPrakash)
    ```bash
 #Docker-Jai
 # Use an official Java and Maven runtime as a parent image
@@ -66,13 +66,13 @@ docker build -t task-api .
 ```docker
 docker images
 ```
-<img width="1280" alt="Screenshot 2024-01-14 at 2 13 58 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/e0ed2f13-c4c0-432d-b4c6-d09e70bde289">
+<img width="1000" alt="Screenshot 2024-01-14 at 2 13 58 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/e0ed2f13-c4c0-432d-b4c6-d09e70bde289">
 
 #### Running the Container
 ```bash
 docker run -p 8080:8080 task-api
 ```
-<img width="1280" alt="Screenshot 2024-01-14 at 2 14 25 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/05355d9a-3f42-4f16-b231-2a1b718fa08a">
+<img width="1000" alt="Screenshot 2024-01-14 at 2 14 25 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/05355d9a-3f42-4f16-b231-2a1b718fa08a">
 
 
 ### Testing the Connection
@@ -85,4 +85,147 @@ docker run -p 8080:8080 task-api
   <img width="1000" alt="Screenshot 2024-01-14 at 2 16 43 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/f5ce902c-09eb-4152-a714-56675b6e4433">
 
 
+## Kubernetes
+Creating Kubernetes manifests for deploying your Java REST API application and MongoDB
+
+### Project Structure
+```bash
+Java-API-Project/
+│
+├── src/                         # Java source files
+│
+├── target/                      # Compiled outputs
+│
+├── Dockerfile                   # Dockerfile for building your Java application
+│
+├── pom.xml                      # Maven configuration file
+│
+├── app-deployment.yaml          # Kubernetes deployment file for the app
+├── app-service.yaml             # Kubernetes service file for the app
+├── mongodb-deployment.yaml      # Kubernetes deployment file for MongoDB
+├── mongodb-service.yaml         # Kubernetes service file for MongoDB
+└── mongodb-pvc.yaml             # Kubernetes PersistentVolumeClaim for MongoDB
+```
+
+
+#### STEP-1 Create Kubernetes Manifests
+- **Deployment Manifest**
+  Create a file named app-deployment.yaml:This manifest describes a deployment for your application
+
+##### app-deployment.yaml
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-api
+  template:
+    metadata:
+      labels:
+        app: task-api
+    spec:
+      containers:
+      - name: task-api
+        image: task-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATA_MONGODB_URI
+          value: "mongodb://mongodb-service:27017/JavaApiJai"
+```
+  
+<img width="1000" alt="Screenshot 2024-01-14 at 2 23 50 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/ca4708b4-e467-4fa1-8077-90904634cfec">
+
+
+
+- **Service Manifest**
+  Create a file named app-service.yaml:This manifest exposes your application on a specific port (NodePort) on your cluster nodes.
+
+  ##### app-service.yam
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-api-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30007
+  selector:
+    app: task-api
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 26 04 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/dd2cd904-e319-4a89-8d69-10c3ba238e37">
+
+
+- **MongoDB Deployment and Service**
+  Use the following manifests for deploying MongoDB. It includes a Deployment, Service, and a PersistentVolumeClaim.
+
+  `mongodb-deployment.yaml`
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: mongodb
+  template:
+    metadata:
+      labels:
+        role: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 27 21 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/c7c65dfd-efbc-41ba-b3d8-5009076f6f7e">
+
+`mongodb-service.yaml`
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    role: mongodb
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 28 01 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/3e7cb86a-e6d0-4668-bde8-a23986be55dd">
+
+`mongodb-pvc.yaml`
+```bash
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+
+<img width="1000" alt="Screenshot 2024-01-14 at 2 28 35 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/9e1387fa-0a21-4e73-b287-fa85a4a47af1">
 
