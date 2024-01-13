@@ -279,7 +279,49 @@ minikube service task-api-service
 ##### Now Lets check our MongoDb Database within the kubernets pod
 <img width="1000" alt="Screenshot 2024-01-14 at 3 00 41 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/755fc921-5b4f-4f40-98b0-07789ac6a06c">
 
- You can see that yes the data which we had entered have been stored in our mongoDB
+ You can see that yes the data which we had inputed got stored in our mongoDB
 
 <img width="1000" alt="Screenshot 2024-01-14 at 3 00 59 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/5bd81303-6951-4208-a3a6-e6b9adaa155f">
+
+
+### Persistent Volume (PV)
+To ensure that a Persistent Volume (PV) is being used to store MongoDB data and that the data persists even if the pod is deleted, we should verify the following:
+
+#### 1. Check Persistent Volume Claim (PVC)
+List PVCs:
+Run the following command to list all PVCs in your Kubernetes cluster:
+```bash
+kubectl get pvc
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 3 17 26 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/3c957c0f-9053-42cf-ae6e-8357a7767421">
+
+Describe PVC:
+Get more details about the MongoDB PVC:
+```bash
+ kubectl describe pvc mongo-pvc
+```
+<img width="1000" alt="Screenshot 2024-01-14 at 3 18 30 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/bd7aa3ed-9e73-4d4b-8eb3-6571137dc5ab">
+
+#### 2. Test Data Persistence
+From the above we have already inserted an entry task in mongoDB withn the cluster, now lets try to delete the above mongodb pod and creat new one and see will the data be there or not
+
+`kubectl get pods`
+
+<img width="1000" alt="Screenshot 2024-01-14 at 3 23 57 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/54b934e9-42ab-4dfa-97b6-67407a9ebe1f">
+
+`kubectl delete pod mongodb-deployment-df7b8b9c-v5zrp`
+
+<img width="1000" alt="Screenshot 2024-01-14 at 3 24 34 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/c39e8dd6-4f64-4eda-92b0-af29b3834e99">
+
+`New Pod Got Created`
+
+<img width="1000" alt="Screenshot 2024-01-14 at 3 25 31 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/288d3d78-865a-4264-a85b-979ef92f0d9e">
+
+##### The data is still present the the mongDb and its persistent
+<img width="1280" alt="Screenshot 2024-01-14 at 3 27 18 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/e6977def-5efe-4927-9321-e995594f43a9">
+
+
+
+# Conclusion
+The successful completion of Task-2 demonstrated a practical application of containerization and Kubernetes in deploying and managing a Java REST API application with MongoDB. The use of Kubernetes facilitated scalable and manageable deployment while ensuring data persistence through PVs and PVCs. This task not only highlighted the importance of proper Kubernetes resource configuration but also reinforced best practices in containerized application deployment and management in a Kubernetes environment.
 
