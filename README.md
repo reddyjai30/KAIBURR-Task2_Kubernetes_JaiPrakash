@@ -250,15 +250,36 @@ kubectl apply -f mongodb-pvc.yaml
 kubectl apply -f app-deployment.yaml
 kubectl apply -f app-service.yaml
 ```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 52 26 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/c9528462-074e-4ac8-90ef-be586eda43bc">
 
 
 -**Verify Pods**
 ```bash
 kubectl get pods
 ```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 50 30 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/72918408-1a17-47e7-8998-4b2aab7209dc">
 
 -**Start Minikube**
 ```bash
 minikube service task-api-service
 ```
+<img width="1000" alt="Screenshot 2024-01-14 at 2 55 29 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/4e770135-531a-4234-bcd0-80704541b3ca">
+
+<img width="1000" alt="Screenshot 2024-01-14 at 2 56 10 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/9a172d16-82ba-4dc4-8508-0f28850efa6f">
+
+
+#### Lets Verify if we are able to PUT data and See in the mongoDb pod which is indepent and within the separate pod
+##### Lets put some task through POSTMAN
+
+<img width="1000" alt="Screenshot 2024-01-14 at 2 56 33 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/a23b6a2b-f010-4e3a-bded-e230403c3585">
+
+##### Now Lets see if its refected into `http://127.0.0.1:59447/tasks`
+<img width="1000" alt="Screenshot 2024-01-14 at 2 58 01 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/35676274-a6a4-4e08-b2c6-8be9fffce2de">
+
+##### Now Lets check our MongoDb Database within the kubernets pod
+<img width="1000" alt="Screenshot 2024-01-14 at 3 00 41 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/755fc921-5b4f-4f40-98b0-07789ac6a06c">
+
+ You can see that yes the data which we had entered have been stored in our mongoDB
+
+<img width="1000" alt="Screenshot 2024-01-14 at 3 00 59 AM" src="https://github.com/reddyjai30/KAIBURR-Task2_Kubernetes_JaiPrakash/assets/47852931/5bd81303-6951-4208-a3a6-e6b9adaa155f">
 
